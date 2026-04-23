@@ -69,7 +69,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               {/* Dashboard shortcut */}
-              // AFTER
+              
 <Link
   to={isEmployer ? '/employer/dashboard' : '/seeker/dashboard'}
   className="btn btn--ghost btn--sm hide-mobile"
