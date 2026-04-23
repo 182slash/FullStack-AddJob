@@ -1704,3 +1704,9 @@ input[type="range"]::-webkit-slider-thumb {
     grid-column: 1 / -1;
   }
 }
+@media (max-width: 640px) {
+  iframe[src*="accounts.google.com"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}

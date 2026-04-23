@@ -123,11 +123,11 @@ const Login = () => {
           </div>
 
           {/* REPLACE the old static button with this */}
-          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden' }}>
+<div style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden', borderRadius: 4 }}>
   <GoogleLogin
     onSuccess={onGoogleSuccess}
     onError={() => setApiError('Google login gagal. Silakan coba lagi.')}
-    width={Math.min(392, window.innerWidth - 80)}
+    width={Math.min(360, window.innerWidth - 64)}
     text="continue_with"
     shape="rectangular"
     locale="id"
