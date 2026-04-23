@@ -69,14 +69,15 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               {/* Dashboard shortcut */}
-              <Link
-                to={isEmployer ? '/employer/dashboard' : '/seeker/dashboard'}
-                className="btn btn--ghost btn--sm"
-                style={{ gap: 6 }}
-              >
-                <LayoutDashboard size={16} />
-                <span>Dashboard</span>
-              </Link>
+              // AFTER
+<Link
+  to={isEmployer ? '/employer/dashboard' : '/seeker/dashboard'}
+  className="btn btn--ghost btn--sm hide-mobile"
+  style={{ gap: 6 }}
+>
+  <LayoutDashboard size={16} />
+  <span>Dashboard</span>
+</Link>
 
               {isEmployer && (
   <>
@@ -96,9 +97,9 @@ const Navbar = () => {
                   style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 6px', borderRadius: 'var(--radius)' }}
                 >
                   <Avatar name={user?.name} src={user?.avatar} size="sm" />
-                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--dark)', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {user?.name?.split(' ')[0]}
-                  </span>
+                  <span className="hide-mobile" style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--dark)', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+  {user?.name?.split(' ')[0]}
+</span>
                   <ChevronDown size={14} style={{ color: 'var(--muted)', flexShrink: 0, transform: dropdown ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
                 </button>
 
@@ -145,7 +146,10 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/login" className="btn btn--ghost btn--sm">Masuk</Link>
-              <Link to="/register" className="btn btn--primary btn--sm">Daftar Gratis</Link>
+              <Link to="/register" className="btn btn--primary btn--sm">
+  <span className="hide-mobile">Daftar Gratis</span>
+  <span className="show-mobile" style={{ display: 'none' }}>Daftar</span>
+</Link>
             </>
           )}
         </div>
