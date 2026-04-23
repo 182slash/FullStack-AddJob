@@ -511,7 +511,8 @@ textarea.form-input { resize: vertical; min-height: 120px; }
   bottom: 0;
   left: 0;
   right: 0;
-  height: 72px;
+  height: calc(72px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   background: var(--card);
   border-top: 1px solid var(--border);
   z-index: var(--z-sticky);
@@ -573,7 +574,7 @@ textarea.form-input { resize: vertical; min-height: 120px; }
   .bottom-nav { display: flex; }
   .navbar__nav { display: none; }
   .navbar__logo-text { font-size: 1.1rem; }
-  .page-wrapper { padding-bottom: 80px; }
+  .page-wrapper { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
   .bottom-nav__item { padding: 6px 2px; }
   .bottom-nav__label { font-size: 0.55rem; }
   .dashboard-main { overflow-x: hidden; }

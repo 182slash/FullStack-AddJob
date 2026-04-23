@@ -123,16 +123,16 @@ const Login = () => {
           </div>
 
           {/* REPLACE the old static button with this */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <GoogleLogin
-              onSuccess={onGoogleSuccess}
-              onError={() => setApiError('Google login gagal. Silakan coba lagi.')}
-              width="392"
-              text="continue_with"
-              shape="rectangular"
-              locale="id"
-            />
-          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden' }}>
+  <GoogleLogin
+    onSuccess={onGoogleSuccess}
+    onError={() => setApiError('Google login gagal. Silakan coba lagi.')}
+    width={Math.min(392, window.innerWidth - 80)}
+    text="continue_with"
+    shape="rectangular"
+    locale="id"
+  />
+</div>
 
           <p style={{ textAlign: 'center', marginTop: 24, fontSize: '0.9375rem', color: 'var(--muted)' }}>
             Belum punya akun?{' '}
