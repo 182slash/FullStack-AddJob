@@ -1,3 +1,4 @@
+import WaveBackground from '@/components/common/WaveBackground'
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -499,7 +500,7 @@ const Landing = () => {
 
       {/* ── Job Categories ────────────────────────────────── */}
 <section style={{ padding: '64px 0', background: 'var(--bg)', position: 'relative', minHeight: 420, overflow: 'hidden' }}>
-  <NetworkBackground />
+  <WaveBackground />
   <div className="container" style={{ position: 'relative', zIndex: 1 }}>
     <div className="section-header text-center" style={{ marginBottom: '36px' }}>
       <h2 className="section-title" style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 800, color: 'var(--dark)', marginBottom: '8px' }}>
