@@ -194,7 +194,7 @@ export default function JobList() {
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:16 }}>
                   {jobs.map((job, i) => (
                     <motion.div key={job._id} initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.04, duration:0.3 }}>
-                      <JobCard job={job} onSave={j => saveJob({ jobId:j._id, saved:false })} isSaved={user?.savedJobs?.includes(job._id)} />
+                      <JobCard job={job} onSave={j => saveJob({ jobId:j._id, saved: (user?.savedJobs||[]).map(String).includes(String(j._id)) })} isSaved={(user?.savedJobs||[]).map(String).includes(String(job._id))} />
                     </motion.div>
                   ))}
                 </div>

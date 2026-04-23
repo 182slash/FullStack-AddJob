@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Mail, Phone, MapPin, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react'
+import { Mail, Phone, MapPin, Instagram, Linkedin } from 'lucide-react'
 
 const Footer = () => (
   <footer style={{ background: '#f5f5f5', color: '#111827', paddingTop: 'clamp(32px, 5vw, 64px)', paddingBottom: 32, marginTop: 'auto' }}>
@@ -24,8 +24,6 @@ const Footer = () => (
             {[
               { Icon: Instagram, href: '#', label: 'Instagram' },
               { Icon: Linkedin,  href: '#', label: 'LinkedIn' },
-              { Icon: Twitter,   href: '#', label: 'Twitter' },
-              { Icon: Youtube,   href: '#', label: 'YouTube' },
             ].map(({ Icon, href, label }) => (
               <a
                 key={label}
