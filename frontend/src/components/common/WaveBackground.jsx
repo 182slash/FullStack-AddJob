@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-const LINE_COUNT  = 75 // Increased significantly for a denser, more voluminous mesh
-const SPEED       = 0.005 // Slightly slower so the massive wave feels elegant
+const LINE_COUNT  = 75
+const SPEED       = 0.009 // Increased speed for more active movement
 
 const WaveBackground = () => {
   const canvasRef = useRef(null)
@@ -14,7 +14,6 @@ const WaveBackground = () => {
     let t = 0
 
     const resize = () => {
-      // Use devicePixelRatio for sharper lines on high-res screens
       const dpr = window.devicePixelRatio || 1
       canvas.width  = canvas.offsetWidth * dpr
       canvas.height = canvas.offsetHeight * dpr
@@ -30,35 +29,37 @@ const WaveBackground = () => {
       
       ctx.clearRect(0, 0, width, height)
 
-      // DYNAMIC VOLUME: Instead of a fixed 100px, we scale it to the container height
-      const mainAmplitude = height * 0.25;  // How far the wave swings up and down
-      const ribbonThickness = height * 0.5; // How wide the "folds" of the ribbon get
+      const mainAmplitude = height * 0.22;  
+      const ribbonThickness = height * 0.45; 
 
       for (let l = 0; l < LINE_COUNT; l++) {
-        // progress goes from -0.5 to 0.5 to center the bundle
         const progress = (l / (LINE_COUNT - 1)) - 0.5
         
         ctx.beginPath()
         ctx.lineWidth = 1
         
-        // Slightly increased base opacity so it shows up better behind your cards
         const alphaMult = 1 - Math.abs(progress) * 1.2
         ctx.strokeStyle = `rgba(79,195,247, ${0.25 * alphaMult})`
 
-        const steps = 150 // Smoothness of the line
+        const steps = 150 
         for (let s = 0; s <= steps; s++) {
           const xNorm = s / steps
           const x = xNorm * width
 
-          // 1. The Core Wave: Sweeps across the whole screen
-          const mainWave = Math.sin(xNorm * Math.PI * 2.5 + t)
+          // 1. Wave Interference (Undulation)
+          // Combining sine and cosine moving in DIFFERENT directions at different speeds
+          // This forces the wave to morph and bounce in place, rather than just sliding left/right.
+          const mainWave = Math.sin(xNorm * Math.PI * 2.2 - t * 1.2) + 
+                           Math.cos(xNorm * Math.PI * 3.5 + t * 0.8) * 0.4;
           
-          // 2. The Volume/Spread: Creates the 3D pinch and swell effect
-          // Added a secondary sine wave to make the folds look more organic
-          const spread = Math.cos(xNorm * Math.PI * 1.5 + t * 0.6) + 
-                         Math.sin(xNorm * Math.PI * 0.5) * 0.4;
+          // 2. The Twist (3D weaving effect)
+          // By adding 'progress' to the time phase, each individual line moves slightly out of sync.
+          // This causes the lines to cross over and weave through each other organically.
+          const linePhase = progress * Math.PI * 3; 
+          const spread = Math.cos(xNorm * Math.PI * 1.8 - t + linePhase) + 
+                         Math.sin(xNorm * Math.PI * 2.5 + t * 1.5) * 0.3;
           
-          // 3. The Vertical Position
+          // 3. Calculate final Y position
           const y = (height * 0.5) + 
                     (mainWave * mainAmplitude) + 
                     (progress * ribbonThickness * spread)
