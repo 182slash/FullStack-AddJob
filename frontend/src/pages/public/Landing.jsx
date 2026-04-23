@@ -611,7 +611,7 @@ const Landing = () => {
             </div>
             <Link to="/jobs" className="btn btn--secondary btn--sm" style={{ flexShrink: 0 }}>Lihat Semua <ChevronRight size={16} /></Link>
           </div>
-          <div className="grid-3 grid-2-featured">
+          <div className="grid-2-featured">
             {jobsLoading
               ? Array(6).fill(0).map((_, i) => <SkeletonJobCard key={i} />)
               : (featuredJobs?.data || []).slice(0, 6).map(job => <JobCard key={job._id} job={job} />)

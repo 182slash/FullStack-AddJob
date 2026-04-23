@@ -1660,7 +1660,9 @@ input[type="range"]::-webkit-slider-thumb {
   margin-bottom: 16px;
 }
 .grid-2-featured {
+  display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
 }
 @media (max-width: 640px) {
   .grid-2-featured { grid-template-columns: 1fr; }
