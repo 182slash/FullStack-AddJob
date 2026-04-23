@@ -33,8 +33,18 @@ export default function CompanyProfile() {
   const { data, isLoading } = useQuery({ queryKey:['myCompany'], queryFn:fetchMyCompany })
   const company = data?.data || data || {}
 
-  const { register, handleSubmit, watch, formState:{ errors, isDirty } } = useForm({
-    values: {
+  const { register, handleSubmit, watch, reset, formState:{ errors, isDirty } } = useForm({
+    defaultValues: {
+      name: '', industry: '', size: '', type: '',
+      website: '', location: '', description: '', culture: '',
+      linkedin: '', twitter: '', instagram: '',
+      nib: '', npwp: '', email: '', phone: '',
+    }
+  })
+
+  useEffect(() => {
+    if (!company?.name) return
+    reset({
       name: company.name||'',
       industry: company.industry||'',
       size: company.size||'',
@@ -50,12 +60,12 @@ export default function CompanyProfile() {
       npwp: company.npwp||'',
       email: company.email||'',
       phone: company.phone||'',
-    }
-  })
+    })
+  }, [company?._id])
 
   const { mutate: save, isPending: saving } = useMutation({
     mutationFn: updateCompany,
-    onSuccess: () => { setSaved(true); qc.invalidateQueries({ queryKey:['myCompany'] }); setTimeout(()=>setSaved(false),2500) },
+    onSuccess: () => { setSaved(true); setTimeout(()=>setSaved(false),2500) },
   })
 
   const { mutate: saveLogo, isPending: uploadingLogo } = useMutation({

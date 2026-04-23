@@ -64,11 +64,11 @@ exports.updateMyCompany = async (req, res, next) => {
     const forbidden = ['owner','isVerified','stats']
     forbidden.forEach(f => delete req.body[f])
 
-    const company = await Company.findOneAndUpdate(
-      { owner: req.user._id },
-      { $set: req.body },
-      { new: true, runValidators: false }
-    )
+const company = await Company.findOneAndUpdate(
+  { owner: req.user._id },
+  { $set: req.body },
+  { new: true, runValidators: true }
+)
     if (!company) return res.status(404).json({ success: false, message: 'Profil perusahaan tidak ditemukan.' })
     res.json({ success: true, data: company })
   } catch (err) { next(err) }
