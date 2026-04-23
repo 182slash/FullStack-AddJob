@@ -78,6 +78,85 @@ const FeaturedJobsMobile = ({ jobs, loading }) => {
   )
 }
 
+const CategoriesMobile = ({ categories, loading }) => {
+  const [current, setCurrent] = useState(0)
+  const allCats = loading ? Array(6).fill(null) : (categories?.data || [])
+  const stacked = allCats.slice(0, 2)
+  const carouselCats = allCats.slice(2)
+
+  useEffect(() => {
+    if (carouselCats.length <= 1) return
+    const timer = setInterval(() => {
+      setCurrent(prev => (prev + 1) % carouselCats.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [carouselCats.length])
+
+  const CatCard = ({ cat }) => (
+    <Link to={`/jobs?category=${cat?.slug || ''}`} style={{
+      background: 'rgba(255,255,255,0.92)', borderRadius: 'var(--radius-md)',
+      padding: '20px 16px', textAlign: 'center', border: '1px solid var(--border-light)',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center', textDecoration: 'none', width: '100%', boxSizing: 'border-box',
+    }}>
+      {!cat ? (
+        <>
+          <div style={{ height: 48, width: 48, background: 'var(--bg-alt)', borderRadius: '50%', marginBottom: 10 }} />
+          <div style={{ height: 12, background: 'var(--bg-alt)', borderRadius: 4, width: '70%', marginBottom: 6 }} />
+          <div style={{ height: 10, background: 'var(--bg-alt)', borderRadius: 4, width: '40%' }} />
+        </>
+      ) : (
+        <>
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 48, height: 48, borderRadius: '50%', marginBottom: 10,
+            background: 'linear-gradient(135deg, rgba(79,195,247,0.14) 0%, rgba(79,195,247,0.06) 100%)',
+            border: '1.5px solid rgba(79,195,247,0.28)',
+          }}>
+            {getCategoryIcon(cat.name)}
+          </div>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.875rem', color: 'var(--dark)', marginBottom: 4, lineHeight: 1.3 }}>
+            {cat.name}
+          </h3>
+          <p style={{ fontSize: '0.75rem', color: 'var(--muted)', margin: 0, fontWeight: 500 }}>
+            {cat.jobCount || 0} lowongan
+          </p>
+        </>
+      )}
+    </Link>
+  )
+
+  return (
+    <div className="show-mobile" style={{ flexDirection: 'column', gap: 12 }}>
+      {stacked.map((cat, i) => <CatCard key={cat?._id || i} cat={cat} />)}
+      {carouselCats.length > 0 && (
+        <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-md)' }}>
+          <div style={{
+            display: 'flex',
+            transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: `translateX(-${current * 100}%)`,
+          }}>
+            {carouselCats.map((cat, i) => (
+              <div key={cat?._id || i} style={{ minWidth: '100%', boxSizing: 'border-box' }}>
+                <CatCard cat={cat} />
+              </div>
+            ))}
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 10 }}>
+            {carouselCats.map((_, i) => (
+              <button key={i} onClick={() => setCurrent(i)} style={{
+                width: i === current ? 20 : 6, height: 6, borderRadius: 3,
+                background: i === current ? 'var(--primary)' : 'rgba(79,195,247,0.25)',
+                border: 'none', padding: 0, cursor: 'pointer', transition: 'all 0.3s ease',
+              }} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 const CATEGORY_ICONS = {
   'Teknologi': '💻',
   'Desain': '🎨',
@@ -577,52 +656,24 @@ const Landing = () => {
         Temukan peluang kerja sesuai bidang keahlian Anda
       </p>
     </div>
-    <motion.div 
-      style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
-        gap: '24px',
-        justifyContent: 'center',
-        maxWidth: 1100,
-        margin: '0 auto'
-      }} 
-      variants={container} 
-      initial="hidden" 
-      whileInView="show" 
-      viewport={{ once: true, margin: '-50px' }}
+
+    {/* Desktop grid */}
+    <motion.div
+      className="hide-mobile"
+      style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '24px', justifyContent: 'center', maxWidth: 1100, margin: '0 auto' }}
+      variants={container} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }}
     >
       {(catLoading ? Array(8).fill({}) : (categories?.data || [])).map((cat, i) => (
         <motion.div key={cat._id || i} variants={item} style={{ height: '100%' }}>
-          <Link
-            to={`/jobs?category=${cat.slug || ''}`}
-            style={{ 
-              background: 'rgba(255,255,255,0.85)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              borderRadius: 'var(--radius-md)', 
-              padding: '40px 32px', 
-              textAlign: 'center', 
-              border: '1px solid var(--border-light)', 
-              display: 'flex', 
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textDecoration: 'none', 
-              transition: 'all 0.3s ease', 
-              cursor: 'pointer',
-              height: '100%',
-              boxSizing: 'border-box'
-            }}
-            onMouseEnter={e => { 
-              e.currentTarget.style.borderColor = '#4FC3F7'; 
-              e.currentTarget.style.transform = 'translateY(-4px)'; 
-              e.currentTarget.style.boxShadow = '0 8px 28px rgba(79,195,247,0.22)'; 
-            }}
-            onMouseLeave={e => { 
-              e.currentTarget.style.borderColor = 'var(--border-light)'; 
-              e.currentTarget.style.transform = 'translateY(0)'; 
-              e.currentTarget.style.boxShadow = 'none'; 
-            }}
+          <Link to={`/jobs?category=${cat.slug || ''}`} style={{
+            background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+            borderRadius: 'var(--radius-md)', padding: '40px 32px', textAlign: 'center',
+            border: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', textDecoration: 'none',
+            transition: 'all 0.3s ease', cursor: 'pointer', height: '100%', boxSizing: 'border-box'
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = '#4FC3F7'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(79,195,247,0.22)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-light)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
           >
             {catLoading ? (
               <>
@@ -632,43 +683,20 @@ const Landing = () => {
               </>
             ) : (
               <>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '56px',
-                  height: '56px',
-                  background: 'linear-gradient(135deg, rgba(79,195,247,0.14) 0%, rgba(79,195,247,0.06) 100%)',
-                  borderRadius: '50%',
-                  marginBottom: '16px',
-                  border: '1.5px solid rgba(79,195,247,0.28)',
-                }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '56px', height: '56px', background: 'linear-gradient(135deg, rgba(79,195,247,0.14) 0%, rgba(79,195,247,0.06) 100%)', borderRadius: '50%', marginBottom: '16px', border: '1.5px solid rgba(79,195,247,0.28)' }}>
                   {getCategoryIcon(cat.name)}
                 </div>
-                <h3 style={{ 
-                  fontFamily: 'var(--font-heading)', 
-                  fontWeight: 700, 
-                  fontSize: '0.95rem', 
-                  color: 'var(--dark)', 
-                  marginBottom: '6px',
-                  lineHeight: 1.3
-                }}>
-                  {cat.name}
-                </h3>
-                <p style={{ 
-                  fontSize: '0.8125rem', 
-                  color: 'var(--muted)', 
-                  margin: 0,
-                  fontWeight: 500
-                }}>
-                  {cat.jobCount || 0} lowongan
-                </p>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.95rem', color: 'var(--dark)', marginBottom: '6px', lineHeight: 1.3 }}>{cat.name}</h3>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', margin: 0, fontWeight: 500 }}>{cat.jobCount || 0} lowongan</p>
               </>
             )}
           </Link>
         </motion.div>
       ))}
     </motion.div>
+
+    {/* Mobile: 2 stacked + carousel */}
+    <CategoriesMobile categories={categories} loading={catLoading} />
   </div>
 </section>
 
