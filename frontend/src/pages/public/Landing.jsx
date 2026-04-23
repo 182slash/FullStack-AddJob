@@ -1,3 +1,4 @@
+import NetworkBackground from '@/components/common/NetworkBackground'
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -498,108 +499,111 @@ const Landing = () => {
       </section>
 
       {/* ── Job Categories ────────────────────────────────── */}
-      <section style={{ padding: '64px 0', background: 'var(--bg)' }}>
-        <div className="container">
-          <div className="section-header text-center" style={{ marginBottom: '36px' }}>
-            <h2 className="section-title" style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 800, color: 'var(--dark)', marginBottom: '8px' }}>
-              Jelajahi Kategori Populer
-            </h2>
-            <p className="section-subtitle" style={{ fontSize: '1rem', color: 'var(--muted)' }}>
-              Temukan peluang kerja sesuai bidang keahlian Anda
-            </p>
-          </div>
-          <motion.div 
+<section style={{ padding: '64px 0', background: 'var(--bg)', position: 'relative', minHeight: 420, overflow: 'hidden' }}>
+  <NetworkBackground />
+  <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+    <div className="section-header text-center" style={{ marginBottom: '36px' }}>
+      <h2 className="section-title" style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 800, color: 'var(--dark)', marginBottom: '8px' }}>
+        Jelajahi Kategori Populer
+      </h2>
+      <p className="section-subtitle" style={{ fontSize: '1rem', color: 'var(--muted)' }}>
+        Temukan peluang kerja sesuai bidang keahlian Anda
+      </p>
+    </div>
+    <motion.div 
+      style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
+        gap: '24px',
+        justifyContent: 'center',
+        maxWidth: 1100,
+        margin: '0 auto'
+      }} 
+      variants={container} 
+      initial="hidden" 
+      whileInView="show" 
+      viewport={{ once: true, margin: '-50px' }}
+    >
+      {(catLoading ? Array(8).fill({}) : (categories?.data || [])).map((cat, i) => (
+        <motion.div key={cat._id || i} variants={item} style={{ height: '100%' }}>
+          <Link
+            to={`/jobs?category=${cat.slug || ''}`}
             style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
-              gap: '24px',
+              background: 'rgba(255,255,255,0.85)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              borderRadius: 'var(--radius-md)', 
+              padding: '40px 32px', 
+              textAlign: 'center', 
+              border: '1px solid var(--border-light)', 
+              display: 'flex', 
+              flexDirection: 'column',
+              alignItems: 'center',
               justifyContent: 'center',
-              maxWidth: 1100,
-              margin: '0 auto'
-            }} 
-            variants={container} 
-            initial="hidden" 
-            whileInView="show" 
-            viewport={{ once: true, margin: '-50px' }}
+              textDecoration: 'none', 
+              transition: 'all 0.3s ease', 
+              cursor: 'pointer',
+              height: '100%',
+              boxSizing: 'border-box'
+            }}
+            onMouseEnter={e => { 
+              e.currentTarget.style.borderColor = '#4FC3F7'; 
+              e.currentTarget.style.transform = 'translateY(-4px)'; 
+              e.currentTarget.style.boxShadow = '0 8px 28px rgba(79,195,247,0.22)'; 
+            }}
+            onMouseLeave={e => { 
+              e.currentTarget.style.borderColor = 'var(--border-light)'; 
+              e.currentTarget.style.transform = 'translateY(0)'; 
+              e.currentTarget.style.boxShadow = 'none'; 
+            }}
           >
-            {(catLoading ? Array(8).fill({}) : (categories?.data || [])).map((cat, i) => (
-              <motion.div key={cat._id || i} variants={item} style={{ height: '100%' }}>
-                <Link
-                  to={`/jobs?category=${cat.slug || ''}`}
-                  style={{ 
-                    background: '#fff',
-                    borderRadius: 'var(--radius-md)', 
-                    padding: '40px 32px', 
-                    textAlign: 'center', 
-                    border: '1px solid var(--border-light)', 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textDecoration: 'none', 
-                    transition: 'all 0.3s ease', 
-                    cursor: 'pointer',
-                    height: '100%',
-                    boxSizing: 'border-box'
-                  }}
-                  onMouseEnter={e => { 
-                    e.currentTarget.style.borderColor = '#4FC3F7'; 
-                    e.currentTarget.style.transform = 'translateY(-4px)'; 
-                    e.currentTarget.style.boxShadow = '0 8px 28px rgba(79,195,247,0.22)'; 
-                  }}
-                  onMouseLeave={e => { 
-                    e.currentTarget.style.borderColor = 'var(--border-light)'; 
-                    e.currentTarget.style.transform = 'translateY(0)'; 
-                    e.currentTarget.style.boxShadow = 'none'; 
-                  }}
-                >
-                  {catLoading ? (
-                    <>
-                      <div style={{ height: 56, width: 56, background: 'var(--bg-alt)', borderRadius: '50%', marginBottom: 16 }} />
-                      <div style={{ height: 14, background: 'var(--bg-alt)', borderRadius: 4, width: '75%', marginBottom: 10 }} />
-                      <div style={{ height: 12, background: 'var(--bg-alt)', borderRadius: 4, width: '45%' }} />
-                    </>
-                  ) : (
-                    <>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '56px',
-                        height: '56px',
-                        background: 'linear-gradient(135deg, rgba(79,195,247,0.14) 0%, rgba(79,195,247,0.06) 100%)',
-                        borderRadius: '50%',
-                        marginBottom: '16px',
-                        border: '1.5px solid rgba(79,195,247,0.28)',
-                      }}>
-                        {getCategoryIcon(cat.name)}
-                      </div>
-                      <h3 style={{ 
-                        fontFamily: 'var(--font-heading)', 
-                        fontWeight: 700, 
-                        fontSize: '0.95rem', 
-                        color: 'var(--dark)', 
-                        marginBottom: '6px',
-                        lineHeight: 1.3
-                      }}>
-                        {cat.name}
-                      </h3>
-                      <p style={{ 
-                        fontSize: '0.8125rem', 
-                        color: 'var(--muted)', 
-                        margin: 0,
-                        fontWeight: 500
-                      }}>
-                        {cat.jobCount || 0} lowongan
-                      </p>
-                    </>
-                  )}
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+            {catLoading ? (
+              <>
+                <div style={{ height: 56, width: 56, background: 'var(--bg-alt)', borderRadius: '50%', marginBottom: 16 }} />
+                <div style={{ height: 14, background: 'var(--bg-alt)', borderRadius: 4, width: '75%', marginBottom: 10 }} />
+                <div style={{ height: 12, background: 'var(--bg-alt)', borderRadius: 4, width: '45%' }} />
+              </>
+            ) : (
+              <>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '56px',
+                  height: '56px',
+                  background: 'linear-gradient(135deg, rgba(79,195,247,0.14) 0%, rgba(79,195,247,0.06) 100%)',
+                  borderRadius: '50%',
+                  marginBottom: '16px',
+                  border: '1.5px solid rgba(79,195,247,0.28)',
+                }}>
+                  {getCategoryIcon(cat.name)}
+                </div>
+                <h3 style={{ 
+                  fontFamily: 'var(--font-heading)', 
+                  fontWeight: 700, 
+                  fontSize: '0.95rem', 
+                  color: 'var(--dark)', 
+                  marginBottom: '6px',
+                  lineHeight: 1.3
+                }}>
+                  {cat.name}
+                </h3>
+                <p style={{ 
+                  fontSize: '0.8125rem', 
+                  color: 'var(--muted)', 
+                  margin: 0,
+                  fontWeight: 500
+                }}>
+                  {cat.jobCount || 0} lowongan
+                </p>
+              </>
+            )}
+          </Link>
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+</section>
 
       {/* ── Featured Jobs ─────────────────────────────────── */}
       <section style={{ padding: '56px 0', background: '#fff' }}>
