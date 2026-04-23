@@ -148,13 +148,13 @@ export default function ArticleDetail() {
           <img src={article.cover} alt={article.title} style={{ width:'100%', borderRadius:'var(--radius-lg)', maxHeight:420, objectFit:'cover', marginBottom:36 }}/>
 
           {/* Content */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 200px', gap:40, alignItems:'flex-start' }}>
-            <article>
-              {renderContent(article.content)}
-            </article>
+          <div className="article-content-grid">
+  <article>
+    {renderContent(article.content)}
+  </article>
 
             {/* Sticky sidebar */}
-            <div style={{ position:'sticky', top:88 }}>
+              <div className="article-sidebar" style={{ position:'sticky', top:88 }}>
               <div className="card card-body" style={{ marginBottom:16 }}>
                 <p style={{ fontFamily:'var(--font-heading)', fontWeight:700, marginBottom:12, fontSize:'0.9375rem' }}>Bagikan Artikel</p>
                 <div style={{ display:'flex', flexDirection:'column', gap:10 }}>

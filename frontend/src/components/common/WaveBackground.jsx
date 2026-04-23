@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-const LINE_COUNT  = 45 // Increased for that dense ribbon look
-const AMPLITUDE   = 100
-const SPEED       = 0.008
-const LINE_COLOR   = 'rgba(79,195,247,0.15)' // Your requested color
+const LINE_COUNT  = 75 // Increased significantly for a denser, more voluminous mesh
+const SPEED       = 0.005 // Slightly slower so the massive wave feels elegant
 
 const WaveBackground = () => {
   const canvasRef = useRef(null)
@@ -32,33 +30,38 @@ const WaveBackground = () => {
       
       ctx.clearRect(0, 0, width, height)
 
+      // DYNAMIC VOLUME: Instead of a fixed 100px, we scale it to the container height
+      const mainAmplitude = height * 0.25;  // How far the wave swings up and down
+      const ribbonThickness = height * 0.5; // How wide the "folds" of the ribbon get
+
       for (let l = 0; l < LINE_COUNT; l++) {
         // progress goes from -0.5 to 0.5 to center the bundle
         const progress = (l / (LINE_COUNT - 1)) - 0.5
         
         ctx.beginPath()
         ctx.lineWidth = 1
-        // Lines near the edge of the ribbon are fainter
-        const alphaMult = 1 - Math.abs(progress) * 1.5
-        ctx.strokeStyle = `rgba(79,195,247, ${0.2 * alphaMult})`
+        
+        // Slightly increased base opacity so it shows up better behind your cards
+        const alphaMult = 1 - Math.abs(progress) * 1.2
+        ctx.strokeStyle = `rgba(79,195,247, ${0.25 * alphaMult})`
 
-        const steps = 120 // Smoothness of the line
+        const steps = 150 // Smoothness of the line
         for (let s = 0; s <= steps; s++) {
           const xNorm = s / steps
           const x = xNorm * width
 
-          // 1. The Core Wave: Determines the general path (Sine)
-          const mainWave = Math.sin(xNorm * Math.PI * 2 + t)
+          // 1. The Core Wave: Sweeps across the whole screen
+          const mainWave = Math.sin(xNorm * Math.PI * 2.5 + t)
           
-          // 2. The Separation: This makes lines fan out and pinch
-          // We use a cosine wave to vary the "spread" along the X axis
-          const spread = Math.cos(xNorm * Math.PI * 1.5 + t * 0.5)
+          // 2. The Volume/Spread: Creates the 3D pinch and swell effect
+          // Added a secondary sine wave to make the folds look more organic
+          const spread = Math.cos(xNorm * Math.PI * 1.5 + t * 0.6) + 
+                         Math.sin(xNorm * Math.PI * 0.5) * 0.4;
           
           // 3. The Vertical Position
-          // We center it at height * 0.5 and add the wave components
           const y = (height * 0.5) + 
-                    (mainWave * AMPLITUDE) + 
-                    (progress * AMPLITUDE * 1.2 * spread)
+                    (mainWave * mainAmplitude) + 
+                    (progress * ribbonThickness * spread)
 
           if (s === 0) {
             ctx.moveTo(x, y)
@@ -82,7 +85,7 @@ const WaveBackground = () => {
   }, [])
 
   return (
-    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
       <canvas
         ref={canvasRef}
         style={{ width: '100%', height: '100%', display: 'block' }}
