@@ -12,7 +12,7 @@ import { JOB_TYPE_LABELS } from '@/utils/formatters'
 import { jobPostSchema } from '@/utils/validators'
 
 const STEPS = ['Informasi Lowongan', 'Detail Pekerjaan', 'Pengaturan & Publikasi']
-const CATEGORIES = ['Teknologi Informasi','Marketing & Sales','Keuangan & Akuntansi','HR & Rekrutmen','Desain & Kreatif','Operasional','Legal','Kesehatan','Pendidikan','Lainnya']
+const CATEGORIES = ['Teknologi Informasi','Marketing & Sales','Keuangan & Akuntansi','HR & Rekrutmen','Desain & Kreatif','Operasional','Legal','Kesehatan','Pendidikan','Konstruksi','Retail','Lainnya']
 const WORK_MODES = [{ value:'onsite', label:'Onsite', desc:'Bekerja di kantor' }, { value:'remote', label:'Remote', desc:'Bekerja dari mana saja' }, { value:'hybrid', label:'Hybrid', desc:'Campuran onsite & remote' }]
 const EXPERIENCE_OPTS = [{ value:'fresh', label:'Fresh Graduate' }, { value:'1-2', label:'1 – 2 Tahun' }, { value:'3-5', label:'3 – 5 Tahun' }, { value:'5+', label:'5+ Tahun' }]
 
