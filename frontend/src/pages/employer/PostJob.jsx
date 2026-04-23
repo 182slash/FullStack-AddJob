@@ -60,14 +60,15 @@ export default function PostJob() {
     if (ok) setStep(s => s+1)
   }
 
-  const addSkill = (e) => {
-    if ((e.key==='Enter'||e.key===',') && skillInput.trim()) {
-      e.preventDefault()
-      if (!skills.includes(skillInput.trim())) setSkills(s=>[...s, skillInput.trim()])
-      setSkillInput('')
-      setShowSuggestions(false)
-    }
+const addSkill = (e) => {
+  if ((e.key==='Enter'||e.key===',') && skillInput.trim()) {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!skills.includes(skillInput.trim())) setSkills(s=>[...s, skillInput.trim()])
+    setSkillInput('')
+    setShowSuggestions(false)
   }
+}
 
   const submit = (data) => {
     const payload = {
