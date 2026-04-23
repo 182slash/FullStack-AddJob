@@ -37,11 +37,10 @@ const Login = () => {
   }
 
   const loginWithGoogle = useGoogleLogin({
-    flow: 'implicit',
-    onSuccess: async (tokenResponse) => {
+        onSuccess: async (tokenResponse) => {
       setApiError('')
       console.log('Google tokenResponse:', tokenResponse)
-      const result = await googleAuth(tokenResponse.id_token, 'seeker')
+      const result = await googleAuth(tokenResponse.access_token, 'seeker')
       if (result.success) {
         if (from) return navigate(from, { replace: true })
         navigate(result.role === 'employer' ? '/employer/dashboard' : '/seeker/dashboard', { replace: true })

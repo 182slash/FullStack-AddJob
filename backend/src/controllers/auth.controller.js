@@ -120,15 +120,32 @@ exports.login = async (req, res, next) => {
   } catch (err) { next(err) }
 }
 
-// ── POST /api/auth/google ──────────────────────────────────
 exports.googleAuth = async (req, res, next) => {
   try {
     const { credential, role = 'seeker' } = req.body
     if (!credential) return res.status(400).json({ success: false, message: 'Google credential diperlukan.' })
 
-    const ticket  = await googleClient.verifyIdToken({ idToken: credential, audience: process.env.GOOGLE_CLIENT_ID })
-    const payload = ticket.getPayload()
-    const { sub: googleId, email: emailAddr, name, picture } = payload
+    let googleId, emailAddr, name, picture
+
+    if (credential.startsWith('ya29.')) {
+      // access_token flow
+      const gRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${credential}` }
+      })
+      const payload = await gRes.json()
+      googleId  = payload.sub
+      emailAddr = payload.email
+      name      = payload.name
+      picture   = payload.picture
+    } else {
+      // id_token flow
+      const ticket  = await googleClient.verifyIdToken({ idToken: credential, audience: process.env.GOOGLE_CLIENT_ID })
+      const payload = ticket.getPayload()
+      googleId  = payload.sub
+      emailAddr = payload.email
+      name      = payload.name
+      picture   = payload.picture
+    }
 
     let user = await User.findOne({ $or: [{ googleId }, { email: emailAddr }] }).select('+refreshTokens').populate('company', 'name logo slug')
 
