@@ -8,6 +8,7 @@ import JobCard from '@/components/common/JobCard'
 import { SkeletonJobCard, SkeletonStatCard } from '@/components/common/Skeleton'
 import Badge from '@/components/common/Badge'
 import { formatRelativeTime, APPLICATION_STATUS_LABELS, APPLICATION_STATUS_COLORS } from '@/utils/formatters'
+import { useFeaturedJobs, useSaveJob } from '@/hooks/useJobs'
 
 const STATUS_ICONS = { pending:<Send size={20}/>, reviewed:<Clock size={20}/>, shortlist:<CheckCircle size={20}/>, interview:<CheckCircle size={20}/>, offered:<CheckCircle size={20}/>, hired:<CheckCircle size={20}/>, rejected:<XCircle size={20}/>, withdrawn:<XCircle size={20}/> }
 const STATUS_BG = { pending:'var(--accent-light)', reviewed:'#E3F2FD', shortlist:'var(--accent-light)', interview:'var(--warning-light)', offered:'var(--success-light)', hired:'var(--success-light)', rejected:'var(--error-light)', withdrawn:'var(--bg-alt)' }
@@ -17,7 +18,8 @@ const container = { hidden:{}, show:{ transition:{ staggerChildren:0.07 } } }
 const item = { hidden:{opacity:0,y:16}, show:{opacity:1,y:0,transition:{duration:0.35}} }
 
 export default function SeekerDashboard() {
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
+  const { mutate: saveJob } = useSaveJob()
   const { data:jobsData, isLoading:jobsLoading } = useFeaturedJobs()
   const { data:appsData, isLoading:appsLoading } = useMyApplications({ limit:5 })
 
@@ -95,7 +97,16 @@ export default function SeekerDashboard() {
             </div>
           ) : (
             <div className="grid-2-featured">
-              {jobs.slice(0,6).map(j=><JobCard key={j._id} job={j}/>)}
+              {jobs.slice(0,6).map(j=>(
+  <JobCard key={j._id} job={j}
+    isSaved={(user?.savedJobs||[]).map(String).includes(String(j._id))}
+    onSave={j => {
+      const alreadySaved = (user?.savedJobs||[]).map(String).includes(String(j._id))
+      updateUser({ savedJobs: alreadySaved ? (user.savedJobs||[]).filter(id => String(id) !== String(j._id)) : [...(user.savedJobs||[]), j._id] })
+      saveJob({ jobId: j._id, saved: alreadySaved })
+    }}
+  />
+))}
             </div>
           )}
         </motion.div>
