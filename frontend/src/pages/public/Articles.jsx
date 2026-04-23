@@ -64,8 +64,8 @@ export default function Articles() {
         {/* Featured Article */}
         {featured && activeCategory==='Semua' && !search && (
           <Link to={`/articles/${featured.slug}`} style={{ textDecoration:'none', display:'block', marginBottom:36 }}>
-            <motion.div whileHover={{ y:-3 }} style={{ borderRadius:'var(--radius-lg)', overflow:'hidden', display:'grid', gridTemplateColumns:'1fr 1fr', background:'var(--card)', boxShadow:'var(--shadow-md)' }}>
-              <img src={featured.cover} alt="" style={{ width:'100%', height:280, objectFit:'cover' }}/>
+            <motion.div whileHover={{ y:-3 }} style={{ borderRadius:'var(--radius-lg)', overflow:'hidden', background:'var(--card)', boxShadow:'var(--shadow-md)' }} className="featured-article-card">
+              <img src={featured.cover} alt="" style={{ width:'100%', height:220, objectFit:'cover' }}/>
               <div style={{ padding:'32px 36px', display:'flex', flexDirection:'column', justifyContent:'center' }}>
                 <Badge variant="primary" style={{ width:'fit-content', marginBottom:14 }}>✨ Artikel Pilihan</Badge>
                 <h2 style={{ fontFamily:'var(--font-heading)', fontWeight:800, fontSize:'1.5rem', color:'var(--dark)', lineHeight:1.4, marginBottom:12 }}>{featured.title}</h2>
@@ -87,7 +87,7 @@ export default function Articles() {
             <p>Coba kata kunci atau kategori lain.</p>
           </div>
         ) : (
-          <motion.div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:24 }}
+          <motion.div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(300px,100%),1fr))', gap:24 }}
             initial="h" animate="s" variants={{h:{},s:{transition:{staggerChildren:0.06}}}}>
             {filtered.map(article=>(
               <motion.div key={article._id} variants={{h:{opacity:0,y:16},s:{opacity:1,y:0}}} whileHover={{ y:-4 }}>

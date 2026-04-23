@@ -1667,3 +1667,15 @@ input[type="range"]::-webkit-slider-thumb {
 @media (max-width: 640px) {
   .grid-2-featured { grid-template-columns: 1fr; }
 }
+.featured-article-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 640px) {
+  .featured-article-card {
+    grid-template-columns: 1fr;
+  }
+  .featured-article-card img {
+    height: 200px !important;
+  }
+}
