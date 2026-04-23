@@ -137,10 +137,13 @@ export default function ArticleDetail() {
         <p style={{ fontSize:'0.75rem', color:'var(--muted)' }}>{article.author.role}</p>
       </div>
     </div>
-    <div style={{ display:'flex', gap:14, fontSize:'0.8125rem', color:'var(--muted-light)' }}>
-      <span><Clock size={12} style={{ verticalAlign:'middle' }}/> {article.readTime} menit baca</span>
-      <span>{formatDate(article.createdAt)}</span>
-    </div>
+   <div style={{ display:'flex', alignItems:'center', gap:14, fontSize:'0.8125rem', color:'var(--muted-light)' }}>
+  <span style={{ display:'flex', alignItems:'center', gap:4 }}>
+    <Clock size={12}/> {article.readTime} menit baca
+  </span>
+  <span>·</span>
+  <span>{formatDate(article.createdAt)}</span>
+</div>
   </div>
 </div>
 
