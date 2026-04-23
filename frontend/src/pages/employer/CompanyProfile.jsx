@@ -30,7 +30,7 @@ export default function CompanyProfile() {
   const [docUploading, setDocUploading] = useState({})
   const [docDeleting, setDocDeleting]   = useState({})
 
-  const { data, isLoading } = useQuery({ queryKey:['myCompany'], queryFn:fetchMyCompany })
+  const { data, isLoading } = useQuery({ queryKey:['myCompany'], queryFn:fetchMyCompany, staleTime: 1000 * 60 * 5 })
   const company = data?.data || data || {}
 
   const { register, handleSubmit, watch, reset, formState:{ errors, isDirty } } = useForm({
@@ -61,7 +61,7 @@ export default function CompanyProfile() {
       email: company.email||'',
       phone: company.phone||'',
     })
-  }, [company?._id])
+  }, [company?._id, reset])
 
   const { mutate: save, isPending: saving } = useMutation({
     mutationFn: updateCompany,
@@ -345,7 +345,7 @@ export default function CompanyProfile() {
 
         {/* Save button */}
         <div style={{ display:'flex', gap:12, marginTop:8 }}>
-          <button type="submit" className={`btn ${saved?'btn--success':'btn--primary'}`} disabled={saving} style={{ minWidth:160 }}>
+          <button type="submit" className={`btn ${saved?'btn--success':'btn--primary'}`} disabled={saving || isDirty === false} style={{ minWidth:160 }}>
             {saving ? 'Menyimpan...' : saved ? <><CheckCircle2 size={16}/> Tersimpan!</> : <><Save size={16}/> Simpan Perubahan</>}
           </button>
         </div>

@@ -33,6 +33,7 @@ const ALLOWED = [
   'http://localhost:3000',
   'http://localhost:4173',
   'https://www.globaladaptasi.com',
+  'https://globaladaptasi.com',
 ]
 app.use(cors({
   origin: (origin, cb) => {
@@ -43,6 +44,7 @@ app.use(cors({
   methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
 }))
+app.options('*', cors())
 
 // ── General Rate Limit ────────────────────────────────────
 app.use('/api', rateLimit({
