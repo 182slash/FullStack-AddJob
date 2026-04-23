@@ -124,25 +124,25 @@ export default function ArticleDetail() {
 
         <motion.div initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }}>
           {/* Header */}
-          <div style={{ marginBottom:24 }}>
-            <Badge variant="primary" style={{ marginBottom:14 }}>{article.category}</Badge>
-            <h1 style={{ fontFamily:'var(--font-heading)', fontSize:'clamp(1.5rem,3vw,2.25rem)', fontWeight:800, lineHeight:1.3, marginBottom:16 }}>
-              {article.title}
-            </h1>
-            <div style={{ display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
-              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                {article.author.avatar && <img src={article.author.avatar} alt="" style={{ width:36, height:36, borderRadius:'50%', objectFit:'cover' }}/>}
-                <div>
-                  <p style={{ fontWeight:700, fontSize:'0.875rem' }}>{article.author.name}</p>
-                  <p style={{ fontSize:'0.75rem', color:'var(--muted)' }}>{article.author.role}</p>
-                </div>
-              </div>
-              <div style={{ display:'flex', gap:14, fontSize:'0.8125rem', color:'var(--muted-light)', marginLeft:'auto', flexWrap:'wrap' }}>
-                <span><Clock size={12} style={{ verticalAlign:'middle' }}/> {article.readTime} menit baca</span>
-                <span>{formatDate(article.createdAt)}</span>
-              </div>
-            </div>
-          </div>
+<div style={{ marginBottom:24 }}>
+  <Badge variant="primary" style={{ marginBottom:14 }}>{article.category}</Badge>
+  <h1 style={{ fontFamily:'var(--font-heading)', fontSize:'clamp(1.5rem,3vw,2.25rem)', fontWeight:800, lineHeight:1.3, marginBottom:16 }}>
+    {article.title}
+  </h1>
+  <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+    <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+      {article.author.avatar && <img src={article.author.avatar} alt="" style={{ width:36, height:36, borderRadius:'50%', objectFit:'cover' }}/>}
+      <div>
+        <p style={{ fontWeight:700, fontSize:'0.875rem' }}>{article.author.name}</p>
+        <p style={{ fontSize:'0.75rem', color:'var(--muted)' }}>{article.author.role}</p>
+      </div>
+    </div>
+    <div style={{ display:'flex', gap:14, fontSize:'0.8125rem', color:'var(--muted-light)' }}>
+      <span><Clock size={12} style={{ verticalAlign:'middle' }}/> {article.readTime} menit baca</span>
+      <span>{formatDate(article.createdAt)}</span>
+    </div>
+  </div>
+</div>
 
           {/* Cover Image */}
           <img src={article.cover} alt={article.title} style={{ width:'100%', borderRadius:'var(--radius-lg)', maxHeight:420, objectFit:'cover', marginBottom:36 }}/>
