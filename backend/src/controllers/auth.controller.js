@@ -152,7 +152,7 @@ exports.googleAuth = async (req, res, next) => {
     if (!user) {
       user = await User.create({ name, email: emailAddr, googleId, avatar: picture, role, isVerified: true, password: crypto.randomBytes(20).toString('hex') })
       if (role === 'employer') {
-        const company = await Company.create({ name: `${name}'s Company`, owner: user._id })
+        const company = await Company.create({ name: companyName || name, owner: user._id })
         user.company = company._id
         await user.save({ validateBeforeSave: false })
         await user.populate('company', 'name logo slug')
