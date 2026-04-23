@@ -568,7 +568,7 @@ textarea.form-input { resize: vertical; min-height: 120px; }
 }
 .seeker-grid { grid-template-columns: 1fr 340px; }
 .employer-grid { grid-template-columns: 1fr 360px; }
-.show-mobile { display: none; }
+.show-mobile { display: none !important; }
 @media (max-width: 768px) {
   .bottom-nav { display: flex; }
   .navbar__nav { display: none; }
@@ -583,7 +583,7 @@ textarea.form-input { resize: vertical; min-height: 120px; }
   .search-bar__divider { display: none; }
   .search-bar__input { min-width: 0; width: 100%; }
   .hide-mobile { display: none !important; }
-  .show-mobile { display: inline-flex; }
+  .show-mobile { display: flex !important; }
   .employer-grid { grid-template-columns: 1fr !important; display: flex !important; flex-direction: column !important; width: 100% !important; }
   .employer-grid > * { width: 100% !important; }
 }
