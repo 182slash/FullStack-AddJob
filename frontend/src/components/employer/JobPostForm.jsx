@@ -6,7 +6,7 @@ import { jobPostSchema } from '@/utils/validators'
 
 const JOB_TYPES      = [['fulltime','Full-time'],['parttime','Part-time'],['contract','Kontrak'],['freelance','Freelance'],['internship','Magang'],['remote','Remote']]
 const EXPERIENCE_OPT = [['fresh','Fresh Graduate'],['1-2','1-2 Tahun'],['3-5','3-5 Tahun'],['5+','5+ Tahun']]
-const CATEGORIES     = ['Teknologi','Desain','Marketing','Keuangan','Pendidikan','Kesehatan','Hukum','Logistik','HR','Lainnya']
+const CATEGORIES = ['Teknologi','Desain','Marketing','Keuangan','Pendidikan','Kesehatan','Hukum','Logistik','HR','Konstruksi','Retail','Lainnya']
 
 const JobPostForm = ({ onSubmit, defaultValues = {}, isLoading }) => {
   const {
