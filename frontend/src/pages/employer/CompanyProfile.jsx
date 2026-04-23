@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
 import { Camera, Save, CheckCircle2, Building2, Globe, Linkedin, Twitter, Instagram, Upload, FileText, Trash2, ExternalLink } from 'lucide-react'
