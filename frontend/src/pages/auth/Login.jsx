@@ -40,6 +40,7 @@ const Login = () => {
     flow: 'implicit',
     onSuccess: async (tokenResponse) => {
       setApiError('')
+      console.log('Google tokenResponse:', tokenResponse)
       const result = await googleAuth(tokenResponse.id_token, 'seeker')
       if (result.success) {
         if (from) return navigate(from, { replace: true })
