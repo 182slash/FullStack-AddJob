@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 
-const LINE_COUNT  = 18
-const AMPLITUDE   = 55
-const SPEED        = 0.0012
-const LINE_COLOR   = 'rgba(79,195,247,0.18)'
+const LINE_COUNT  = 45 // Increased for that dense ribbon look
+const AMPLITUDE   = 100
+const SPEED       = 0.008
+const LINE_COLOR   = 'rgba(79,195,247,0.15)' // Your requested color
 
 const WaveBackground = () => {
   const canvasRef = useRef(null)
@@ -16,52 +16,67 @@ const WaveBackground = () => {
     let t = 0
 
     const resize = () => {
-      canvas.width  = canvas.offsetWidth
-      canvas.height = canvas.offsetHeight
+      // Use devicePixelRatio for sharper lines on high-res screens
+      const dpr = window.devicePixelRatio || 1
+      canvas.width  = canvas.offsetWidth * dpr
+      canvas.height = canvas.offsetHeight * dpr
+      ctx.scale(dpr, dpr)
     }
+    
     resize()
     window.addEventListener('resize', resize)
 
     const draw = () => {
-      const { width, height } = canvas
+      const width = canvas.offsetWidth
+      const height = canvas.offsetHeight
+      
       ctx.clearRect(0, 0, width, height)
 
       for (let l = 0; l < LINE_COUNT; l++) {
-        const progress  = l / (LINE_COUNT - 1)           // 0 → 1
-        const baseY     = height * 0.2 + progress * height * 0.6
-        const phaseShift = progress * Math.PI * 2.5
-        const amp       = AMPLITUDE * Math.sin(progress * Math.PI) // taper at edges
-
+        // progress goes from -0.5 to 0.5 to center the bundle
+        const progress = (l / (LINE_COUNT - 1)) - 0.5
+        
         ctx.beginPath()
+        ctx.lineWidth = 1
+        // Lines near the edge of the ribbon are fainter
+        const alphaMult = 1 - Math.abs(progress) * 1.5
+        ctx.strokeStyle = `rgba(79,195,247, ${0.2 * alphaMult})`
 
-        const steps = 200
+        const steps = 120 // Smoothness of the line
         for (let s = 0; s <= steps; s++) {
-          const x  = (s / steps) * width
-          const nx = x / width   // normalized 0→1
+          const xNorm = s / steps
+          const x = xNorm * width
 
-          /* multi-frequency wave — matches the flowing organic look */
-          const y = baseY
-            + amp * Math.sin(nx * Math.PI * 3 + t + phaseShift)
-            + (amp * 0.4) * Math.sin(nx * Math.PI * 5.5 - t * 1.3 + phaseShift * 0.7)
-            + (amp * 0.2) * Math.sin(nx * Math.PI * 8   + t * 0.8 + phaseShift * 1.4)
+          // 1. The Core Wave: Determines the general path (Sine)
+          const mainWave = Math.sin(xNorm * Math.PI * 2 + t)
+          
+          // 2. The Separation: This makes lines fan out and pinch
+          // We use a cosine wave to vary the "spread" along the X axis
+          const spread = Math.cos(xNorm * Math.PI * 1.5 + t * 0.5)
+          
+          // 3. The Vertical Position
+          // We center it at height * 0.5 and add the wave components
+          const y = (height * 0.5) + 
+                    (mainWave * AMPLITUDE) + 
+                    (progress * AMPLITUDE * 1.2 * spread)
 
-          s === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+          if (s === 0) {
+            ctx.moveTo(x, y)
+          } else {
+            ctx.lineTo(x, y)
+          }
         }
-
-        /* vary opacity per line — darker in the dense middle */
-        const alpha = 0.08 + 0.22 * Math.sin(progress * Math.PI)
-        ctx.strokeStyle = `rgba(79,195,247,${alpha})`
-        ctx.lineWidth   = 1
         ctx.stroke()
       }
 
       t += SPEED
       rafRef.current = requestAnimationFrame(draw)
     }
+    
     draw()
 
     return () => {
-      cancelAnimationFrame(rafRef.current)
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
       window.removeEventListener('resize', resize)
     }
   }, [])
@@ -70,7 +85,7 @@ const WaveBackground = () => {
     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
       <canvas
         ref={canvasRef}
-        style={{ width: '100%', height: '100%', display: 'block', opacity: 1 }}
+        style={{ width: '100%', height: '100%', display: 'block' }}
       />
     </div>
   )
