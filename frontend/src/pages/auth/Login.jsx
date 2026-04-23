@@ -127,7 +127,7 @@ const Login = () => {
   <GoogleLogin
     onSuccess={onGoogleSuccess}
     onError={() => setApiError('Google login gagal. Silakan coba lagi.')}
-    width={Math.min(360, window.innerWidth - 64)}
+    width={Math.min(320, window.innerWidth - 96)}
     text="continue_with"
     shape="rectangular"
     locale="id"
