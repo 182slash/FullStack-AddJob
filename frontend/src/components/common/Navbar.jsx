@@ -78,6 +78,14 @@ const Navbar = () => {
   <LayoutDashboard size={16} />
   <span>Dashboard</span>
 </Link>
+<Link
+  to={isEmployer ? '/employer/dashboard' : '/seeker/dashboard'}
+  className="btn btn--ghost btn--sm show-mobile"
+  style={{ padding: '6px 8px' }}
+  title="Dashboard"
+>
+  <LayoutDashboard size={18} />
+</Link>
 
               {isEmployer && (
   <>
