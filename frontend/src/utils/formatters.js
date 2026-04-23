@@ -129,11 +129,11 @@ export const cloudinaryUrl = (url, options = {}) => {
   if (!url || !url.includes('res.cloudinary.com')) return url
   const { width = '', height = '', quality = 'auto', format = 'auto' } = options
   const transformation = [
-    format !== 'auto' ? `f_\` : 'f_auto',
-    `q_\`,
-    width ? `w_\` : '',
-    height ? `h_\` : '',
+    format !== 'auto' ? `f_${format}` : 'f_auto',
+    `q_${quality}`,
+    width ? `w_${width}` : '',
+    height ? `h_${height}` : '',
   ].filter(Boolean).join(',')
-  return url.replace('/upload/', `/upload/\/`)
+  return url.replace('/upload/', `/upload/${transformation}/`)
 }
 
