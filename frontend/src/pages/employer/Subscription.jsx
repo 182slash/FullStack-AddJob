@@ -755,20 +755,6 @@ useEffect(() => {
                   {/* Actions */}
                   <div style={{ display: 'flex', gap: 10 }}>
                     <button
-                      onClick={handleDownloadInvoice}
-                      style={{
-                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                        padding: '10px 16px', borderRadius: 'var(--radius)',
-                        border: '1.5px solid var(--border)', background: 'var(--bg)',
-                        fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '0.875rem',
-                        color: 'var(--dark)', cursor: 'pointer', transition: 'all 0.15s',
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--primary)'}
-                      onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-                    >
-                      <Download size={15} /> Unduh Invoice
-                    </button>
-                    <button
                       className="btn btn--primary"
                       style={{ flex: 1 }}
                       disabled={submitting}
