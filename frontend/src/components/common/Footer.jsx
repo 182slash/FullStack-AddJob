@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 import { Mail, Phone, MapPin, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react'
 
 const Footer = () => (
-  <footer style={{ background: '#f5f5f5', color: '#111827', paddingTop: 64, paddingBottom: 32, marginTop: 'auto' }}>
+  <footer style={{ background: '#f5f5f5', color: '#111827', paddingTop: 'clamp(32px, 5vw, 64px)', paddingBottom: 32, marginTop: 'auto' }}>
     <div className="container">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48, marginBottom: 48 }}>
+      <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 48, marginBottom: 48 }}>
 
         {/* Brand */}
         <div>
