@@ -74,12 +74,6 @@ function FilterSidebar({ filters, onChange, onReset, categories }) {
           <span>Rp 50jt+</span>
         </div>
       </div>
-      <div className="filter-group">
-        <label className="filter-checkbox">
-          <input type="checkbox" checked={!!filters.remote} onChange={e => set('remote', e.target.checked)} />
-          Remote / WFH
-        </label>
-      </div>
     </div>
   )
 }
