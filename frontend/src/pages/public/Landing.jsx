@@ -11,6 +11,73 @@ import { useFeaturedJobs, useCategories } from '@/hooks/useJobs'
 import JobCard from '@/components/common/JobCard'
 import { SkeletonJobCard } from '@/components/common/Skeleton'
 
+const FeaturedJobsMobile = ({ jobs, loading }) => {
+  const [current, setCurrent] = useState(0)
+  const carouselJobs = jobs.slice(2)
+
+  useEffect(() => {
+    if (carouselJobs.length <= 1) return
+    const timer = setInterval(() => {
+      setCurrent(prev => (prev + 1) % carouselJobs.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [carouselJobs.length])
+
+  if (loading) return (
+    <div className="show-mobile" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {Array(3).fill(0).map((_, i) => <SkeletonJobCard key={i} />)}
+    </div>
+  )
+
+  if (!jobs.length) return null
+
+  return (
+    <div className="show-mobile" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {/* First 2 stacked */}
+      {jobs.slice(0, 2).map(job => <JobCard key={job._id} job={job} />)}
+
+      {/* Carousel for the rest */}
+      {carouselJobs.length > 0 && (
+        <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-md)' }}>
+          <div
+            style={{
+              display: 'flex',
+              transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+              transform: `translateX(-${current * 100}%)`,
+            }}
+          >
+            {carouselJobs.map(job => (
+              <div key={job._id} style={{ minWidth: '100%', boxSizing: 'border-box' }}>
+                <JobCard job={job} />
+              </div>
+            ))}
+          </div>
+
+          {/* Dot indicators */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 12 }}>
+            {carouselJobs.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                style={{
+                  width: i === current ? 20 : 6,
+                  height: 6,
+                  borderRadius: 3,
+                  background: i === current ? 'var(--primary)' : 'rgba(79,195,247,0.25)',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 const CATEGORY_ICONS = {
   'Teknologi': '💻',
   'Desain': '🎨',
@@ -606,29 +673,35 @@ const Landing = () => {
 </section>
 
       {/* ── Featured Jobs ─────────────────────────────────── */}
-      <section style={{ padding: '56px 0', background: '#fff' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
-            <div>
-              <h2 className="section-title" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}>Lowongan Terbaru</h2>
-              <p className="section-subtitle" style={{ fontSize: '0.9375rem' }}>Diperbarui setiap hari dari perusahaan terpercaya</p>
-            </div>
-            <Link to="/jobs" className="btn btn--secondary btn--sm" style={{ flexShrink: 0 }}>Lihat Semua <ChevronRight size={16} /></Link>
-          </div>
-          <div className="grid-2-featured">
-            {jobsLoading
-              ? Array(6).fill(0).map((_, i) => <SkeletonJobCard key={i} />)
-              : (featuredJobs?.data || []).slice(0, 6).map(job => <JobCard key={job._id} job={job} />)
-            }
-          </div>
-          {!jobsLoading && !featuredJobs?.data?.length && (
-            <div className="empty-state">
-              <div className="empty-state__icon"><Briefcase size={32} /></div>
-              <p>Belum ada lowongan tersedia saat ini.</p>
-            </div>
-          )}
-        </div>
-      </section>
+<section style={{ padding: '56px 0', background: '#fff' }}>
+  <div className="container">
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
+      <div>
+        <h2 className="section-title" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}>Lowongan Terbaru</h2>
+        <p className="section-subtitle" style={{ fontSize: '0.9375rem' }}>Diperbarui setiap hari dari perusahaan terpercaya</p>
+      </div>
+      <Link to="/jobs" className="btn btn--secondary btn--sm" style={{ flexShrink: 0 }}>Lihat Semua <ChevronRight size={16} /></Link>
+    </div>
+
+    {/* Desktop: 2-col grid */}
+    <div className="grid-2-featured hide-mobile">
+      {jobsLoading
+        ? Array(6).fill(0).map((_, i) => <SkeletonJobCard key={i} />)
+        : (featuredJobs?.data || []).slice(0, 6).map(job => <JobCard key={job._id} job={job} />)
+      }
+    </div>
+
+    {/* Mobile: 2 stacked + carousel */}
+    <FeaturedJobsMobile jobs={featuredJobs?.data || []} loading={jobsLoading} />
+
+    {!jobsLoading && !featuredJobs?.data?.length && (
+      <div className="empty-state">
+        <div className="empty-state__icon"><Briefcase size={32} /></div>
+        <p>Belum ada lowongan tersedia saat ini.</p>
+      </div>
+    )}
+  </div>
+</section>
 
       {/* ══════════════════════════════════════════════════════════════
           ── Features — Kenapa Pilih Kami ──

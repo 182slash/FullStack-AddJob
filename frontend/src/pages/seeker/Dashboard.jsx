@@ -94,8 +94,8 @@ export default function SeekerDashboard() {
               <p>Belum ada rekomendasi lowongan.</p>
             </div>
           ) : (
-            <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-              {jobs.slice(0,5).map(j=><JobCard key={j._id} job={j}/>)}
+            <div className="grid-2-featured">
+              {jobs.slice(0,6).map(j=><JobCard key={j._id} job={j}/>)}
             </div>
           )}
         </motion.div>
