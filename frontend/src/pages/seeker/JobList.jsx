@@ -86,7 +86,7 @@ function FilterSidebar({ filters, onChange, onReset, categories }) {
 
 export default function JobList() {
   const [searchParams] = useSearchParams()
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const { mutate: saveJob } = useSaveJob()
   const [keyword, setKeyword] = useState(searchParams.get('q') || '')
   const [location, setLocation] = useState(searchParams.get('location') || '')
@@ -194,7 +194,11 @@ export default function JobList() {
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:16 }}>
                   {jobs.map((job, i) => (
                     <motion.div key={job._id} initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.04, duration:0.3 }}>
-                      <JobCard job={job} onSave={j => saveJob({ jobId:j._id, saved: (user?.savedJobs||[]).map(String).includes(String(j._id)) })} isSaved={(user?.savedJobs||[]).map(String).includes(String(job._id))} />
+                      <JobCard job={job} onSave={j => {
+  const alreadySaved = (user?.savedJobs||[]).map(String).includes(String(j._id))
+  updateUser({ savedJobs: alreadySaved ? (user.savedJobs||[]).filter(id => String(id) !== String(j._id)) : [...(user.savedJobs||[]), j._id] })
+  saveJob({ jobId: j._id, saved: alreadySaved })
+}} isSaved={(user?.savedJobs||[]).map(String).includes(String(job._id))} />
                     </motion.div>
                   ))}
                 </div>
