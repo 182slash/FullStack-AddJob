@@ -152,6 +152,17 @@ const SuperAdminSales = () => {
     }
   }
 
+  const deleteSales = async (salesId, salesName) => {
+    if (!window.confirm(`Hapus akun sales "${salesName}"? Tindakan ini tidak bisa dibatalkan.`)) return
+    try {
+      await api.delete(`/sales/admin/${salesId}`)
+      setAllSales(prev => prev.filter(s => s._id !== salesId))
+      if (expandedRow === salesId) setExpanded(null)
+    } catch (err) {
+      alert(err.response?.data?.message || 'Gagal menghapus akun sales.')
+    }
+  }
+
   const totalPoints = allSales.reduce((sum, s) => sum + s.points, 0)
 
   return (
@@ -252,9 +263,18 @@ const SuperAdminSales = () => {
                           {s.points} poin
                         </span>
                       </td>
-                      <td style={{ padding: '14px 16px', color: 'var(--muted)', fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
-                        {new Date(s.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </td>
+                       <td style={{ padding: '14px 16px', color: 'var(--muted)', fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
+                         {new Date(s.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                       </td>
+                       <td style={{ padding: '14px 16px' }} onClick={e => e.stopPropagation()}>
+                         <button
+                           onClick={() => deleteSales(s._id, s.name)}
+                           style={{ background: 'none', border: '1px solid var(--error)', borderRadius: 6, padding: '5px 8px', cursor: 'pointer', color: 'var(--error)', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem' }}
+                         >
+                           <Trash2 size={14} />
+                           Hapus
+                         </button>
+                       </td>
                     </motion.tr>
 
                     {expandedRow === s._id && (
