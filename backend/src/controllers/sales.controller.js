@@ -110,3 +110,29 @@ exports.getMonthlyReport = async (req, res, next) => {
     res.json({ success: true, data: { month, year, report } })
   } catch (err) { next(err) }
 }
+
+// ── POST /api/sales/admin/create ─────────────────────────
+exports.createSales = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, message: 'Nama, email, dan password wajib diisi.' })
+    }
+
+    if (await User.findOne({ email })) {
+      return res.status(409).json({ success: false, message: 'Email sudah terdaftar.' })
+    }
+
+    const user = await User.create({ name, email, password, role: 'sales' })
+    res.status(201).json({
+      success: true,
+      data: {
+        _id:       user._id,
+        name:      user.name,
+        email:     user.email,
+        role:      user.role,
+        createdAt: user.createdAt,
+      },
+    })
+  } catch (err) { next(err) }
+}

@@ -12,5 +12,6 @@ router.post('/generate-code', requireRole('sales'),       ctrl.generateCode)
 // Super admin routes
 router.get('/admin/all',     requireRole('superadmin'),   ctrl.getAllSales)
 router.get('/admin/monthly', requireRole('superadmin'),   ctrl.getMonthlyReport)
+router.post('/admin/create', requireRole('superadmin'),   ctrl.createSales)
 
 module.exports = router

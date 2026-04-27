@@ -35,7 +35,7 @@ const AddSalesModal = ({ isOpen, onClose, onSuccess }) => {
     setLoading(true)
     setError('')
     try {
-      await api.post('/auth/register', { name, email, password, role: 'sales' })
+      await api.post('/sales/admin/create', { name, email, password })
       setName(''); setEmail(''); setPass('')
       if (onSuccess) onSuccess()
       onClose()
