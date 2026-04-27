@@ -62,8 +62,7 @@ const SalesLogin     = lazy(() => import('@/pages/sales/Login'))
 const SuperAdminDashboard = lazy(() => import('@/pages/superadmin/Dashboard'))
 const SuperAdminLogin     = lazy(() => import('@/pages/superadmin/Login'))
 const SuperAdminSales     = lazy(() => import('@/pages/superadmin/Sales'))
-const SuperAdminEmployer  = lazy(() => import('@/pages/superadmin/Employer'))
-const SuperAdminSeeker    = lazy(() => import('@/pages/superadmin/Seeker'))
+
 
 // Redirects authenticated users away from auth pages based on their role
 const AuthRedirect = ({ children }) => {
