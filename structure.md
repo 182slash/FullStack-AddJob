@@ -1,11 +1,13 @@
 PS X:\Project\FullStack-AddJob> tree /F
 Folder PATH listing for volume 182
-Volume serial number is 0000024A 30B6:2486
+Volume serial number is 00000157 30B6:2486
 X:.
 │   .gitignore
 │   conmmand.md
 │   structure.md
 │   
+├───.sixth
+│   └───skills
 ├───backend
 │   │   package-lock.json
 │   │   package.json
