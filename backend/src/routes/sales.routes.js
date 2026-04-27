@@ -14,5 +14,6 @@ router.get('/admin/all',                requireRole('superadmin'),   ctrl.getAll
 router.get('/admin/monthly',            requireRole('superadmin'),   ctrl.getMonthlyReport)
 router.post('/admin/create',            requireRole('superadmin'),   ctrl.createSales)
 router.get('/admin/transactions/:salesId', requireRole('superadmin'), ctrl.getSalesTransactions)
+router.delete('/admin/:id', requireRole('superadmin'), ctrl.deleteSales)
 
 module.exports = router

@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { Users, Award, TrendingUp, Plus, RefreshCw,
-         ChevronDown, ChevronUp, X, CheckCircle, XCircle } from 'lucide-react'
+         ChevronDown, ChevronUp, X, CheckCircle, XCircle, Trash2 } from 'lucide-react'
 import api from '@/services/api'
 
 const PLAN_COLORS = {
@@ -214,8 +214,8 @@ const SuperAdminSales = () => {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ background: 'var(--bg)' }}>
-                  {['', 'Sales', 'Kode Referral', 'Total Poin', 'Bergabung'].map(h => (
+                 <tr style={{ background: 'var(--bg)' }}>
+                   {['', 'Sales', 'Kode Referral', 'Total Poin', 'Bergabung', 'Aksi'].map(h => (
                     <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
                       {h}
                     </th>
@@ -259,7 +259,7 @@ const SuperAdminSales = () => {
 
                     {expandedRow === s._id && (
                       <tr style={{ background: 'var(--bg)' }}>
-                        <td colSpan={5} style={{ padding: '0 16px 16px 48px' }}>
+                        <td colSpan={6} style={{ padding: '0 16px 16px 48px' }}>
                           {txLoading[s._id] ? (
                             <div style={{ padding: '16px 0', display: 'flex', justifyContent: 'center' }}>
                               <div style={{ width: 24, height: 24, borderRadius: '50%', border: '3px solid var(--accent-light)', borderTopColor: 'var(--primary)', animation: 'spin 0.8s linear infinite' }} />

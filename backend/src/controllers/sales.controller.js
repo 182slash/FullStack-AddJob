@@ -147,3 +147,15 @@ exports.createSales = async (req, res, next) => {
     })
   } catch (err) { next(err) }
 }
+
+// ── DELETE /api/sales/admin/:id ──────────────────────────
+exports.deleteSales = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id)
+    if (!user) return res.status(404).json({ success: false, message: 'Akun sales tidak ditemukan.' })
+    if (user.role !== 'sales') return res.status(400).json({ success: false, message: 'User bukan sales.' })
+
+    await User.findByIdAndDelete(req.params.id)
+    res.json({ success: true, message: 'Akun sales berhasil dihapus.' })
+  } catch (err) { next(err) }
+}
