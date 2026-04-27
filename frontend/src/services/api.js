@@ -34,6 +34,13 @@ const processQueue = (error, token = null) => {
   failedQueue = []
 }
 
+const redirectToLogin = () => {
+  const _role = JSON.parse(localStorage.getItem('user') || '{}')?.role
+  if (_role === 'superadmin') window.location.href = '/superadmin-login'
+  else if (_role === 'sales') window.location.href = '/sales-login'
+  else window.location.href = '/login'
+}
+
 // Response interceptor — handle 401 + token refresh
 api.interceptors.response.use(
   (response) => response,
@@ -58,10 +65,10 @@ api.interceptors.response.use(
       const refreshToken = localStorage.getItem('refreshToken')
 
       if (!refreshToken) {
+        redirectToLogin()
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
         localStorage.removeItem('user')
-        window.location.href = '/login'
         return Promise.reject(error)
       }
 
@@ -79,10 +86,10 @@ api.interceptors.response.use(
         return api(originalRequest)
       } catch (refreshError) {
         processQueue(refreshError, null)
+        redirectToLogin()
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
         localStorage.removeItem('user')
-        window.location.href = '/login'
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
