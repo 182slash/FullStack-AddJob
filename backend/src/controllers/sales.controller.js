@@ -111,6 +111,17 @@ exports.getMonthlyReport = async (req, res, next) => {
   } catch (err) { next(err) }
 }
 
+// ── GET /api/sales/admin/transactions/:salesId ───────────
+exports.getSalesTransactions = async (req, res, next) => {
+  try {
+    const transactions = await ReferralTransaction.find({ salesUserId: req.params.salesId })
+      .populate('companyId', 'name')
+      .sort({ createdAt: -1 })
+
+    res.json({ success: true, data: transactions })
+  } catch (err) { next(err) }
+}
+
 // ── POST /api/sales/admin/create ─────────────────────────
 exports.createSales = async (req, res, next) => {
   try {

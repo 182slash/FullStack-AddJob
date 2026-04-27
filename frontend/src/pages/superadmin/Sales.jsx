@@ -139,7 +139,6 @@ const SuperAdminSales = () => {
     }
     setExpanded(salesId)
 
-    // Fetch transactions for this sales if not cached yet
     if (!txData[salesId]) {
       setTxLoading(prev => ({ ...prev, [salesId]: true }))
       try {
