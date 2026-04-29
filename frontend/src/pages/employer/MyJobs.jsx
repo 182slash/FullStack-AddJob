@@ -107,6 +107,9 @@ export default function MyJobs() {
 
               {/* Actions */}
               <div style={{ display:'flex', gap:8, alignItems:'center', flexShrink:0 }}>
+                <button className="btn btn--secondary btn--sm" onClick={()=>navigate(`/employer/applicants/${job._id}`)}>
+                  <Users size={13}/> {job.applicantCount||0} Pelamar
+                </button>
                 <button className="btn btn--ghost btn--sm" onClick={()=>setReviewJob(job)}>
                   <Eye size={13}/> Review
                 </button>

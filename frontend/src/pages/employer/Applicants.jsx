@@ -36,6 +36,17 @@ export default function Applicants() {
   const applicants = data?.data || []
   const job = jobData?.data || jobData
 
+  if (!jobId) return (
+    <div className="empty-state">
+      <div className="empty-state__icon"><Users size={28}/></div>
+      <h3 style={{ fontFamily:'var(--font-heading)', fontWeight:700, marginBottom:8 }}>Pilih Lowongan</h3>
+      <p>Pilih lowongan dari halaman Kelola Lowongan untuk melihat pelamarnya.</p>
+      <Link to="/employer/jobs" className="btn btn--primary" style={{ marginTop:20 }}>
+        Ke Kelola Lowongan
+      </Link>
+    </div>
+  )
+
   const handleStatusUpdate = (appId, status) => {
     updateStatus({ id:appId, status, note:statusNote }, {
       onSuccess:()=>{ setUpdating(null); setStatusNote(''); refetch() }
