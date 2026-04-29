@@ -38,7 +38,7 @@ export default function Applicants() {
 
   if (!jobId) return (
     <div className="empty-state">
-      <div className="empty-state__icon"><Users size={28}/></div>
+      <div className="empty-state__icon"><User size={28}/></div>
       <h3 style={{ fontFamily:'var(--font-heading)', fontWeight:700, marginBottom:8 }}>Pilih Lowongan</h3>
       <p>Pilih lowongan dari halaman Kelola Lowongan untuk melihat pelamarnya.</p>
       <Link to="/employer/jobs" className="btn btn--primary" style={{ marginTop:20 }}>
