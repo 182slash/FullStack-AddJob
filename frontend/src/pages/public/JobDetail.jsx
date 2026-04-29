@@ -65,7 +65,19 @@ export default function JobDetail() {
     const fd = new FormData()
     if (cvFile) fd.append('resume', cvFile)
     fd.append('coverLetter', coverLetter)
-    applyJob({jobId:id, formData:fd}, {onSuccess:()=>setApplied(true)})
+    applyJob({jobId:id, formData:fd}, {
+      onSuccess:()=>setApplied(true),
+      onError: (err) => {
+        const status = err.response?.status
+        if (status === 401) {
+          setApplyModal(false)
+          navigate('/login', { state: { from: { pathname: `/jobs/${id}` } } })
+        } else {
+          const msg = err.response?.data?.message || 'Gagal mengirim lamaran.'
+          alert(msg)
+        }
+      }
+    })
   }
 
   return (

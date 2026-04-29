@@ -48,7 +48,9 @@ api.interceptors.response.use(
     const originalRequest = error.config
     const isAuthEndpoint  = originalRequest.url?.includes('/auth/')
 
-    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
+    const isMultipart = originalRequest.headers['Content-Type']?.includes('multipart/form-data')
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint && !isMultipart) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })

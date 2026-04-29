@@ -40,7 +40,15 @@ export default function ApplyJob() {
     fd.append('coverLetter', coverLetter)
     Object.entries(form).forEach(([k,v])=>fd.append(k,v))
     fd.append('skills', JSON.stringify(skills))
-    applyJob({ jobId, formData:fd }, { onSuccess:()=>setSuccess(true) })
+    applyJob({ jobId, formData:fd }, { onSuccess:()=>setSuccess(true), onError: (err) => {
+      const status = err.response?.status
+      if (status === 401) {
+        navigate('/login', { state: { from: { pathname: `/seeker/apply/${jobId}` } } })
+      } else {
+        const msg = err.response?.data?.message || 'Gagal mengirim lamaran. Silakan coba lagi.'
+        alert(msg)
+      }
+    } })
   }
 
   if (jobLoading) return (
