@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Download, ChevronDown, User, Mail, Phone, MapPin, GraduationCap, X } from 'lucide-react'
-import { useJobApplicants, useUpdateApplicationStatus } from '@/hooks/useApplications'
+import { useAllApplicants, useJobApplicants, useUpdateApplicationStatus } from '@/hooks/useApplications'
 import { useJob } from '@/hooks/useJobs'
 import Badge from '@/components/common/Badge'
 import Modal from '@/components/common/Modal'
@@ -28,24 +28,15 @@ export default function Applicants() {
   const [statusNote, setStatusNote] = useState('')
   const [updating, setUpdating] = useState(null)
 
-  const params = activeTab!=='all' ? { status: activeTab } : {}
+  const params = activeTab !== 'all' ? { status: activeTab } : {}
   const { data: jobData } = useJob(jobId)
-  const { data, isLoading, refetch } = useJobApplicants(jobId, params)
+  const { data, isLoading, refetch } = jobId
+    ? useJobApplicants(jobId, params)
+    : useAllApplicants(params)
   const { mutate: updateStatus, isPending } = useUpdateApplicationStatus()
 
   const applicants = data?.data || []
   const job = jobData?.data || jobData
-
-  if (!jobId) return (
-    <div className="empty-state">
-      <div className="empty-state__icon"><User size={28}/></div>
-      <h3 style={{ fontFamily:'var(--font-heading)', fontWeight:700, marginBottom:8 }}>Pilih Lowongan</h3>
-      <p>Pilih lowongan dari halaman Kelola Lowongan untuk melihat pelamarnya.</p>
-      <Link to="/employer/jobs" className="btn btn--primary" style={{ marginTop:20 }}>
-        Ke Kelola Lowongan
-      </Link>
-    </div>
-  )
 
   const handleStatusUpdate = (appId, status) => {
     updateStatus({ id:appId, status, note:statusNote }, {
@@ -61,9 +52,9 @@ export default function Applicants() {
           <ArrowLeft size={14}/> Kembali ke Lowongan
         </Link>
         <h1 style={{ fontFamily:'var(--font-heading)', fontWeight:800, fontSize:'1.75rem', marginBottom:4 }}>
-          {job?.title || 'Pelamar'}
+          {jobId ? (job?.title || 'Pelamar') : 'Semua Pelamar'}
         </h1>
-        <p style={{ color:'var(--muted)' }}>{applicants.length} pelamar · {job?.location}</p>
+        <p style={{ color:'var(--muted)' }}>{applicants.length} pelamar{jobId && job?.location ? ` · ${job.location}` : ''}</p>
       </div>
 
       {/* Tabs */}
@@ -88,10 +79,10 @@ export default function Applicants() {
           ))}
         </div>
       ) : applicants.length===0 ? (
-        <div className="empty-state">
+         <div className="empty-state">
           <div className="empty-state__icon"><User size={28}/></div>
           <h3 style={{ fontFamily:'var(--font-heading)', fontWeight:700, marginBottom:8 }}>Belum ada pelamar</h3>
-          <p>{activeTab==='all' ? 'Belum ada yang melamar lowongan ini.' : `Tidak ada pelamar dengan status "${STATUS_TAB_LABELS[activeTab]}".`}</p>
+          <p>{activeTab==='all' ? (jobId ? 'Belum ada yang melamar lowongan ini.' : 'Belum ada pelamar untuk lowongan yang dipilih.') : `Tidak ada pelamar dengan status "${STATUS_TAB_LABELS[activeTab]}".`}</p>
         </div>
       ) : (
         <motion.div style={{ display:'flex', flexDirection:'column', gap:12 }}
@@ -132,10 +123,16 @@ export default function Applicants() {
                     </div>
                   </div>
 
-                  <div style={{ display:'flex', gap:14, flexWrap:'wrap', marginTop:8, fontSize:'0.8125rem', color:'var(--muted)' }}>
-                    {app.applicant?.location && <span style={{ display:'flex', alignItems:'center', gap:4 }}><MapPin size={12}/>{app.applicant.location}</span>}
-                    {app.applicant?.email && <span style={{ display:'flex', alignItems:'center', gap:4 }}><Mail size={12}/>{app.applicant.email}</span>}
-                  </div>
+                   <div style={{ display:'flex', gap:14, flexWrap:'wrap', marginTop:8, fontSize:'0.8125rem', color:'var(--muted)' }}>
+                     {app.applicant?.location && <span style={{ display:'flex', alignItems:'center', gap:4 }}><MapPin size={12}/>{app.applicant.location}</span>}
+                     {app.applicant?.email && <span style={{ display:'flex', alignItems:'center', gap:4 }}><Mail size={12}/>{app.applicant.email}</span>}
+                   </div>
+
+                  {!jobId && app.job?.title && (
+                    <p style={{ fontSize:'0.8rem', color:'var(--primary)', fontWeight:600, marginTop:2 }}>
+                      → {app.job.title}
+                    </p>
+                  )}
 
                   {app.coverLetter && (
                     <p style={{ marginTop:10, fontSize:'0.875rem', color:'var(--muted)', lineHeight:1.6, background:'var(--bg)', padding:'8px 12px', borderRadius:'var(--radius)', fontStyle:'italic' }}>

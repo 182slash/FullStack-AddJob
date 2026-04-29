@@ -16,7 +16,8 @@ router.delete('/:id/withdraw',        requireRole('seeker'),   ctrl.withdrawAppl
 
 // Employer
 router.get('/jobs/:jobId/applicants', requireRole('employer'), ctrl.getJobApplicants)
-router.get('/employer/stats',         requireRole('employer'), ctrl.getApplicationStats)
+router.get('/employer/all',          requireRole('employer'), ctrl.getAllApplicants)
+router.get('/employer/stats',        requireRole('employer'), ctrl.getApplicationStats)
 router.patch('/:id/status',           requireRole('employer'), ctrl.updateApplicationStatus)
 router.patch('/:id/interview',        requireRole('employer'), ctrl.scheduleInterview)
 

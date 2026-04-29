@@ -15,6 +15,8 @@ export const applicationService = {
   getJobApplicants: (jobId, params) =>
     api.get(`/applications/jobs/${jobId}/applicants`, { params }),
 
+  getAllApplicants: (params) => api.get('/applications/employer/all', { params }),
+
   updateApplicationStatus: (id, status, note) =>
     api.patch(`/applications/${id}/status`, { status, note }),
 

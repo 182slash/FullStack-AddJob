@@ -56,6 +56,28 @@ exports.applyToJob = async (req, res, next) => {
   } catch (err) { next(err) }
 }
 
+// ── GET /api/applications/employer/all ───────────────────
+exports.getAllApplicants = async (req, res, next) => {
+  try {
+    const { status, page = 1, limit = 20 } = req.query
+    const company = await Company.findOne({ owner: req.user._id })
+    if (!company) return res.json({ success: true, data: [], pagination: { total: 0 } })
+
+    const filter = { company: company._id }
+    if (status && status !== 'all') filter.status = status
+
+    const total = await Application.countDocuments(filter)
+    const apps  = await Application.find(filter)
+      .populate('applicant', 'name email avatar headline phone location skills resumeUrl')
+      .populate('job', 'title location')
+      .sort('-createdAt')
+      .skip((Number(page) - 1) * Number(limit))
+      .limit(Number(limit))
+
+    res.json({ success: true, data: apps, pagination: { total, page: Number(page), pages: Math.ceil(total / Number(limit)) } })
+  } catch (err) { next(err) }
+}
+
 // ── GET /api/applications/my ──────────────────────────────
 exports.getMyApplications = async (req, res, next) => {
   try {
