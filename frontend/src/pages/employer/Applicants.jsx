@@ -88,15 +88,16 @@ export default function Applicants() {
         <motion.div style={{ display:'flex', flexDirection:'column', gap:12 }}
           initial="h" animate="s" variants={{h:{},s:{transition:{staggerChildren:0.05}}}}>
           {applicants.map(app => (
-            <motion.div key={app._id} variants={{h:{opacity:0,y:10},s:{opacity:1,y:0}}} className="applicant-card"
-              style={{ position:'relative', overflow:'hidden' }}>
+             <motion.div key={app._id} variants={{h:{opacity:0,y:10},s:{opacity:1,y:0}}} className="applicant-card"
+              style={{ position:'relative' }}>
               {app.isBlurred && (
                 <div style={{
                   position:'absolute', inset:0, zIndex:10,
                   backdropFilter:'blur(6px)', WebkitBackdropFilter:'blur(6px)',
                   background:'rgba(255,255,255,0.6)',
                   display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:8,
-                  borderRadius:'var(--radius-md)',
+                   borderRadius:'var(--radius-md)',
+                  overflow:'hidden',
                 }}>
                   <p style={{ fontFamily:'var(--font-heading)', fontWeight:700, fontSize:'0.9rem', color:'var(--dark)' }}>
                     🔒 Kandidat terkunci
