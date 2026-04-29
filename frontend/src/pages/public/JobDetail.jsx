@@ -52,8 +52,13 @@ export default function JobDetail() {
   const similarJobs = (featuredData?.data||[]).filter(j=>j._id!==id).slice(0,3)
 
   const handleApply = () => {
-    if (!isAuthenticated) return navigate('/login', {state:{from:{pathname:`/jobs/${id}`}}})
-    setApplyModal(true)
+    if (!isAuthenticated) return navigate('/login', { state: { from: { pathname: `/jobs/${id}` } } })
+    if (!isSeeker) return // employers can't apply
+    if (user?.resumeUrl) {
+      setApplyModal(true) // has CV → quick apply modal
+    } else {
+      navigate(`/seeker/apply/${id}`) // no CV → full form with upload
+    }
   }
 
   const submitApplication = () => {
@@ -199,9 +204,18 @@ export default function JobDetail() {
               <label className="form-label">Cover Letter <span style={{color:'var(--muted)',fontWeight:400}}>(Opsional)</span></label>
               <textarea className="rich-textarea" placeholder="Ceritakan mengapa Anda cocok..." rows={5} value={coverLetter} onChange={e=>setCoverLetter(e.target.value)}/>
             </div>
-            <button className="btn btn--accent btn--block btn--lg" onClick={submitApplication} disabled={applyPending||(!cvFile&&!user?.resumeUrl)}>
-              {applyPending?'Mengirim...':'Kirim Lamaran'}
-            </button>
+              {!cvFile && !user?.resumeUrl && (
+                <p style={{ fontSize: '0.8125rem', color: 'var(--error)', marginTop: -12 }}>
+                  CV wajib dilampirkan. <Link to={`/seeker/apply/${id}`} style={{ color: 'var(--primary)', fontWeight: 600 }}>Upload via form lengkap</Link>
+                </p>
+              )}
+              <button
+                className="btn btn--accent btn--block btn--lg"
+                onClick={submitApplication}
+                disabled={applyPending || (!cvFile && !user?.resumeUrl)}
+              >
+                {applyPending ? 'Mengirim...' : 'Kirim Lamaran'}
+              </button>
           </div>
         )}
       </Modal>
