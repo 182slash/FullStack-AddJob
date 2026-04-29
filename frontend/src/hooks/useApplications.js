@@ -9,8 +9,8 @@ export const appKeys = {
   stats:     () => [...appKeys.all, 'stats'],
 }
 
-export const useAllApplicants = (params = {})
-  => useQuery({
+export const useAllApplicants = (params = {}) =>
+  useQuery({
     queryKey: [...appKeys.all, 'employer-all', params],
     queryFn:  () => applicationService.getAllApplicants(params).then(r => r.data),
   })
